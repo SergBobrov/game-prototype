@@ -10,7 +10,7 @@ function serviceWorker(): Plugin {
     generateBundle(_, bundle) {
       const files = Object.keys(bundle).filter((f) => !f.endsWith('.map'));
       const version = Date.now().toString(36);
-      const precache = ['./', ...files, 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'favicon.png'];
+      const precache = ['./', ...files, 'manifest.webmanifest', 'manifest.en.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'favicon.png'];
       const source = `
 const CACHE = 'peregruzka-${version}';
 const PRECACHE = ${JSON.stringify(precache)};

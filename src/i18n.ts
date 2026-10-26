@@ -14,6 +14,12 @@ export function setLang(l: Lang): void {
   lang = l;
   document.documentElement.lang = l;
   document.title = tr('ПЕРЕГРУЗКА', 'OVERLOAD');
+  // The installed app takes its name from the manifest, so point the page at the manifest of the chosen language.
+  document.querySelector<HTMLLinkElement>('link[rel=manifest]')?.setAttribute('href', l === 'ru' ? 'manifest.webmanifest' : 'manifest.en.webmanifest');
+  document.querySelector('meta[name=apple-mobile-web-app-title]')?.setAttribute('content', tr('ПЕРЕГРУЗКА', 'OVERLOAD'));
+  document
+    .querySelector('meta[name=description]')
+    ?.setAttribute('content', tr('Неоновый 3D-рогалик на арене внутри компьютерной сети. Сделан ИИ полностью автономно.', 'A neon 3D arena roguelike inside a computer network. Built fully autonomously by AI.'));
 }
 
 export const getLang = (): Lang => lang;
