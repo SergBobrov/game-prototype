@@ -1,0 +1,6 @@
+html, body { margin: 0; height: 100%; background: #05070f; overflow: hidden; }
+body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, sans-serif; }
+#app { position: fixed; inset: 0; height: 100dvh; touch-action: none; }
+.label { position: fixed; left: 0; right: 0; top: calc(env(safe-area-inset-top) + 16px); text-align: center; color: #cfe3ff; pointer-events: none; }
+.label b { display: block; font-size: 26px; letter-spacing: 6px; color: #00e5ff; text-shadow: 0 0 12px #00e5ff; }
+.label span { font-size: 13px; opacity: 0.7; }
