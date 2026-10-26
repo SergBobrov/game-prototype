@@ -110,7 +110,9 @@ export class Hud {
     this.combo.textContent = w.combo > 1 ? `×${m}  ·  ${w.combo} комбо` : '';
     this.combo.className = 'combo m' + Math.min(m, 8);
     this.comboBar.style.width = `${Math.max(0, w.comboT / 2.5) * 100}%`;
-    this.wave.textContent = w.isBoss ? `СЕКТОР ${w.sector + 1} · БОСС` : `СЕКТОР ${w.sector + 1} · ВОЛНА ${w.wave + 1}/${WAVES_PER_SECTOR}`;
+    // After the final boss the sector counter advances past the last one; keep the label on sector 3.
+    const sec = Math.min(w.sector, SECTOR_INFO.length - 1) + 1;
+    this.wave.textContent = w.isBoss || w.sector >= SECTOR_INFO.length ? `СЕКТОР ${sec} · БОСС` : `СЕКТОР ${sec} · ВОЛНА ${w.wave + 1}/${WAVES_PER_SECTOR}`;
 
     const boss = w.enemies.find((e) => e.type === 'hydraHead' || e.type === 'core' || e.type === 'zeroday');
     if (boss) {

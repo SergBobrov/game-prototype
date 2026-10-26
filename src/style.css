@@ -46,7 +46,7 @@ button { font: inherit; color: inherit; }
 .combo.m6, .combo.m7, .combo.m8 { color: var(--pink); text-shadow: 0 0 14px var(--pink); animation: shake 0.15s infinite; }
 .combo-bar { margin-left: auto; width: 160px; height: 3px; background: rgba(255, 255, 255, 0.08); }
 .combo-fill { height: 100%; background: var(--gold); margin-left: auto; }
-.wave { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font: 800 12px 'Unbounded'; letter-spacing: 4px; opacity: 0.7; }
+.wave { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font: 800 12px 'Unbounded'; letter-spacing: 4px; opacity: 0.7; white-space: nowrap; }
 .boss { display: none; position: absolute; top: 46px; left: 50%; transform: translateX(-50%); width: min(620px, 70vw); text-align: center; }
 .boss-name { font: 900 16px 'Unbounded'; letter-spacing: 6px; color: #fff; text-shadow: 0 0 14px var(--red); margin-bottom: 6px; }
 .boss-bar { position: relative; height: 10px; background: rgba(255, 42, 90, 0.12); border: 1px solid rgba(255, 42, 90, 0.5); }
@@ -166,6 +166,8 @@ kbd { display: inline-block; min-width: 30px; padding: 4px 8px; text-align: cent
   .hud-left { left: 12px; top: 12px; }
   .hud-right { right: 12px; top: 10px; }
   .score { font-size: 22px; }
+  .wave { top: 64px; font-size: 10px; letter-spacing: 2px; }
+  .boss { top: 84px; }
   .end-stats { grid-template-columns: repeat(2, 140px); }
   .card { width: 160px; min-height: 230px; }
 }
