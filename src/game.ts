@@ -2,8 +2,9 @@ import { AchievementTracker } from './achievements';
 import { AudioEngine } from './audio/audio';
 import { Autopilot } from './bot/autopilot';
 import { Controls } from './input';
+import { achievementText, setLang, shipText, tr } from './i18n';
 import { loadMeta, saveMeta, type Meta } from './meta';
-import { SHIPS, TICK } from './sim/config';
+import { TICK } from './sim/config';
 import type { ShipId, SimEvent } from './sim/types';
 import { World } from './sim/world';
 import { Hud } from './ui/hud';
@@ -70,6 +71,7 @@ export class Game {
 
   private applySettings(): void {
     const s = this.meta.settings;
+    setLang(s.lang);
     this.audio.setVolumes(s.music, s.sfx);
     this.view.cam.shakeScale = s.shake;
     this.view.showDamage = s.damageNumbers;
@@ -84,7 +86,7 @@ export class Game {
       this.meta.settings.autoFire = !this.meta.settings.autoFire;
       this.controls.autoFire = this.meta.settings.autoFire;
       saveMeta(this.meta);
-      this.hud.showBanner(this.controls.autoFire ? 'АВТООГОНЬ: ВКЛ' : 'АВТООГОНЬ: ВЫКЛ', '', 'small');
+      this.hud.showBanner(this.controls.autoFire ? tr('АВТООГОНЬ: ВКЛ', 'AUTO-FIRE: ON') : tr('АВТООГОНЬ: ВЫКЛ', 'AUTO-FIRE: OFF'), '', 'small');
     }
   }
 
@@ -96,6 +98,11 @@ export class Game {
     this.newAttractWorld();
     this.hud.show(false);
     this.audio.setMenu(true);
+    this.showTitleScreen();
+  }
+
+  /** Title menu only, without restarting the attract demo behind it. */
+  private showTitleScreen(): void {
     this.screens.title(this.meta, this.ship, {
       play: (ship) => {
         this.audio.ui('pick');
@@ -103,6 +110,11 @@ export class Game {
       },
       settings: () => this.screens.settings(this.meta.settings, () => this.onSettings(), () => this.toTitle()),
       help: () => this.screens.help(() => this.toTitle()),
+      lang: (l) => {
+        this.meta.settings.lang = l;
+        this.onSettings();
+        this.showTitleScreen();
+      },
     });
   }
 
@@ -183,7 +195,7 @@ export class Game {
       const unlock = (id: ShipId) => {
         if (!m.unlocked.includes(id)) {
           m.unlocked.push(id);
-          unlocks.push(`Новый корабль: ${SHIPS[id].name}`);
+          unlocks.push(`${tr('Новый корабль', 'New ship')}: ${shipText(id).name}`);
         }
       };
       if (r.bossesKilled >= 1) unlock('impulse');
@@ -260,7 +272,10 @@ export class Game {
     for (const ev of events) if (ev.t === 'waveStart') this.hud.waveBanner(this.world);
     if (!this.autopilot) {
       const got = this.achievements.check(this.meta, this.world, events);
-      for (const a of got) this.hud.toast(a.name, a.desc);
+      for (const a of got) {
+        const txt = achievementText(a);
+        this.hud.toast(txt.name, txt.desc);
+      }
       if (got.length) saveMeta(this.meta);
     }
   }

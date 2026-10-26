@@ -1,3 +1,4 @@
+import { browserLang, type Lang } from './i18n';
 import type { ShipId } from './sim/types';
 
 export interface Settings {
@@ -8,6 +9,7 @@ export interface Settings {
   autoFire: boolean;
   damageNumbers: boolean;
   showFps: boolean;
+  lang: Lang;
 }
 
 export interface Meta {
@@ -31,7 +33,7 @@ export const defaultMeta = (): Meta => ({
   wins: 0,
   kills: 0,
   achievements: [],
-  settings: { music: 0.7, sfx: 0.8, shake: 1, quality: 'high', autoFire: false, damageNumbers: true, showFps: false },
+  settings: { music: 0.7, sfx: 0.8, shake: 1, quality: 'high', autoFire: false, damageNumbers: true, showFps: false, lang: browserLang() },
 });
 
 export function loadMeta(): Meta {

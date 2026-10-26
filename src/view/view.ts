@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { ENEMIES, SECTOR_INFO } from '../sim/config';
+import { tr } from '../i18n';
 import type { SimEvent } from '../sim/types';
 import type { World } from '../sim/world';
 import { Arena } from './arena';
@@ -118,7 +119,7 @@ export class View {
           if (r > 0.6) this.fx.ring(ev.x, ev.z, 0.3, 1.5 + r * 2.5, c.clone().multiplyScalar(2), 0.4);
           this.cam.addTrauma(big ? 0.6 : 0.03 + r * 0.06);
           this.aberr = Math.max(this.aberr, 0.002 + r * 0.002);
-          if (ev.elite) this.popups.add(ev.x, ev.z, 'ЭЛИТА', 'elite', 1.0, 2.2);
+          if (ev.elite) this.popups.add(ev.x, ev.z, tr('ЭЛИТА', 'ELITE'), 'elite', 1.0, 2.2);
           break;
         }
         case 'playerHit':

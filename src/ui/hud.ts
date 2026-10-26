@@ -1,4 +1,5 @@
-import { ENEMIES, SECTOR_INFO, WAVES_PER_SECTOR } from '../sim/config';
+import { SECTOR_INFO, WAVES_PER_SECTOR } from '../sim/config';
+import { enemyName, num, sectorText, tr } from '../i18n';
 import type { World } from '../sim/world';
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls: string, parent?: HTMLElement, html?: string): HTMLElementTagNameMap[K] {
@@ -42,7 +43,7 @@ export class Hud {
     const row = el('div', 'hud-row', left);
     this.dash = el('div', 'dash', row);
     const emp = el('div', 'emp', row);
-    this.empLabel = el('div', 'emp-label', emp, 'ЭМИ [Q]');
+    this.empLabel = el('div', 'emp-label', emp);
     const bar = el('div', 'emp-bar', emp);
     this.empFill = el('div', 'emp-fill', bar);
 
@@ -80,14 +81,14 @@ export class Hud {
   }
 
   waveBanner(w: World): void {
-    const info = SECTOR_INFO[w.sector];
+    const info = sectorText(w.sector);
     if (w.isBoss) {
-      const name = ENEMIES[info.boss].name;
-      this.showBanner(`⚠ ${name} ⚠`, 'Обнаружена угроза высшего уровня', 'boss');
+      const name = enemyName(SECTOR_INFO[w.sector].boss);
+      this.showBanner(`⚠ ${name} ⚠`, tr('Обнаружена угроза высшего уровня', 'Top-level threat detected'), 'boss');
     } else if (w.wave === 0) {
-      this.showBanner(`СЕКТОР ${w.sector + 1}: ${info.name}`, info.sub, 'sector');
+      this.showBanner(`${tr('СЕКТОР', 'SECTOR')} ${w.sector + 1}: ${info.name}`, info.sub, 'sector');
     } else {
-      this.showBanner(`ВОЛНА ${w.wave + 1}`, `из ${WAVES_PER_SECTOR}`, '');
+      this.showBanner(`${tr('ВОЛНА', 'WAVE')} ${w.wave + 1}`, `${tr('из', 'of')} ${WAVES_PER_SECTOR}`, '');
     }
   }
 
@@ -102,22 +103,24 @@ export class Hud {
       this.shield.innerHTML = Array.from({ length: s.shieldMax }, (_, i) => `<i class="${i < p.shield ? 'on' : ''}"></i>`).join('');
       this.dash.innerHTML = Array.from({ length: s.dashCharges }, (_, i) => `<i class="${i < p.dashCharges ? 'on' : ''}"></i>`).join('');
     }
+    this.empLabel.textContent = tr('ЭМИ [Q]', 'EMP [Q]');
     this.empFill.style.width = `${Math.round(p.empCharge * 100)}%`;
     this.empLabel.classList.toggle('ready', p.empCharge >= 1);
     this.shownScore += (w.run.score - this.shownScore) * Math.min(1, dt * 10);
-    this.score.textContent = Math.round(this.shownScore).toLocaleString('ru-RU');
+    this.score.textContent = num(Math.round(this.shownScore));
     const m = w.multiplier;
-    this.combo.textContent = w.combo > 1 ? `×${m}  ·  ${w.combo} комбо` : '';
+    this.combo.textContent = w.combo > 1 ? `×${m}  ·  ${w.combo} ${tr('комбо', 'combo')}` : '';
     this.combo.className = 'combo m' + Math.min(m, 8);
     this.comboBar.style.width = `${Math.max(0, w.comboT / 2.5) * 100}%`;
     // After the final boss the sector counter advances past the last one; keep the label on sector 3.
     const sec = Math.min(w.sector, SECTOR_INFO.length - 1) + 1;
-    this.wave.textContent = w.isBoss || w.sector >= SECTOR_INFO.length ? `СЕКТОР ${sec} · БОСС` : `СЕКТОР ${sec} · ВОЛНА ${w.wave + 1}/${WAVES_PER_SECTOR}`;
+    const secLabel = `${tr('СЕКТОР', 'SECTOR')} ${sec}`;
+    this.wave.textContent = w.isBoss || w.sector >= SECTOR_INFO.length ? `${secLabel} · ${tr('БОСС', 'BOSS')}` : `${secLabel} · ${tr('ВОЛНА', 'WAVE')} ${w.wave + 1}/${WAVES_PER_SECTOR}`;
 
     const boss = w.enemies.find((e) => e.type === 'hydraHead' || e.type === 'core' || e.type === 'zeroday');
     if (boss) {
       this.bossWrap.style.display = 'block';
-      this.bossName.textContent = ENEMIES[boss.type].name + (boss.gen > 0 ? `  ·  ФАЗА ${boss.gen + 1}` : '');
+      this.bossName.textContent = enemyName(boss.type) + (boss.gen > 0 ? `  ·  ${tr('ФАЗА', 'PHASE')} ${boss.gen + 1}` : '');
       const f = Math.max(0, boss.hp / boss.maxHp);
       this.bossFill.style.width = `${f * 100}%`;
       const trail = parseFloat(this.bossTrail.style.width || '100') / 100;
@@ -132,7 +135,7 @@ export class Hud {
       this.fpsAcc += dt;
       this.fpsN++;
       if (this.fpsAcc > 0.5) {
-        this.fps.textContent = `${Math.round(this.fpsN / this.fpsAcc)} FPS · ${w.enemies.length} врагов · ${w.bullets.length} пуль`;
+        this.fps.textContent = `${Math.round(this.fpsN / this.fpsAcc)} FPS · ${w.enemies.length} ${tr('врагов', 'enemies')} · ${w.bullets.length} ${tr('пуль', 'bullets')}`;
         this.fpsAcc = 0;
         this.fpsN = 0;
       }

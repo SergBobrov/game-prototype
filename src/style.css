@@ -171,3 +171,7 @@ kbd { display: inline-block; min-width: 30px; padding: 4px 8px; text-align: cent
   .end-stats { grid-template-columns: repeat(2, 140px); }
   .card { width: 160px; min-height: 230px; }
 }
+.lang-switch { position: absolute; top: 16px; right: 20px; display: flex; border: 1px solid var(--line); }
+.lang-switch button { padding: 6px 12px; background: none; border: none; font: 800 12px 'Unbounded'; letter-spacing: 2px; color: var(--text); opacity: 0.5; cursor: pointer; }
+.lang-switch button:hover { opacity: 1; }
+.lang-switch button.sel { background: var(--cyan); color: #001018; opacity: 1; }
