@@ -115,7 +115,7 @@ export class EnemyView {
       const tint = new THREE.Color(def.color).multiplyScalar(0.25);
       const body = new THREE.InstancedMesh(
         bodyGeo(type),
-        new THREE.MeshStandardMaterial({ color: tint, metalness: 0.75, roughness: 0.3, flatShading: true, emissive: new THREE.Color(def.color).multiplyScalar(0.12) }),
+        new THREE.MeshStandardMaterial({ color: tint, metalness: 0.75, roughness: 0.3, flatShading: true, emissive: new THREE.Color(def.color).multiplyScalar(type === 'swarmer' || type === 'splitter' || type === 'mine' ? 0.6 : 0.2) }),
         max,
       );
       body.castShadow = true;

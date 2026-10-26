@@ -608,7 +608,11 @@ export class World {
     if (d > e.r + p.r) return;
     const dmg = ENEMIES[e.type].contact;
     if (dmg > 0) this.damagePlayer(dmg);
-    if (e.type === 'swarmer' && p.invuln > 0.9) this.damageEnemy(e, 999, false);
+    // Bits are kamikaze packets: they pop on impact.
+    if (e.type === 'swarmer') {
+      this.killEnemy(e);
+      return;
+    }
     const nx = (e.x - p.x) / (d || 1);
     const nz = (e.z - p.z) / (d || 1);
     e.vx += nx * 8;

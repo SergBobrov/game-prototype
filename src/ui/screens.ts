@@ -161,7 +161,7 @@ export class Screens {
       })
       .join('');
     const node = h(`<div class="screen upgrades">
-      <div class="up-title">${w.isBoss ? 'ТРОФЕЙ БОССА' : 'СЕКТОР ЗАЧИЩЕН'}</div>
+      <div class="up-title">${w.isBoss ? 'ТРОФЕЙ БОССА' : 'ВОЛНА ЗАЧИЩЕНА'}</div>
       <div class="up-sub">Выбери модуль · клавиши 1–3</div>
       <div class="cards">${cards}</div>
     </div>`);
@@ -196,7 +196,7 @@ export class Screens {
     const r = w.run;
     const mins = Math.floor(r.time / 60);
     const secs = Math.floor(r.time % 60).toString().padStart(2, '0');
-    const acc = r.shots ? Math.round((r.damageDealt / Math.max(1, r.shots * w.stats.damage)) * 100) : 0;
+    const modules = Object.values(w.owned).reduce((a, b) => a + b, 0);
     const node = h(`<div class="screen end ${victory ? 'win' : 'lose'}">
       <div class="end-title" data-text="${victory ? 'СИСТЕМА СПАСЕНА' : 'ПРОЦЕСС ЗАВЕРШЁН'}">${victory ? 'СИСТЕМА СПАСЕНА' : 'ПРОЦЕСС ЗАВЕРШЁН'}</div>
       <div class="end-sub">${victory ? 'Нулевой день устранён. Сеть свободна.' : `Сектор ${w.sector + 1}, ${w.isBoss ? 'бой с боссом' : 'волна ' + (w.wave + 1)}`}</div>
@@ -207,7 +207,7 @@ export class Screens {
         <div><b>${r.maxCombo}</b>макс. комбо</div>
         <div><b>${r.bossesKilled}</b>боссов</div>
         <div><b>${Math.round(r.damageDealt).toLocaleString('ru-RU')}</b>урона</div>
-        <div><b>${acc}%</b>эффективность</div>
+        <div><b>${modules}</b>модулей</div>
       </div>
       ${unlocks.map((u) => `<div class="unlock">🔓 ${u}</div>`).join('')}
       <div class="menu-row">
